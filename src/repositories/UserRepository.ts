@@ -1,6 +1,7 @@
 import { UserDTO } from '../dtos/UserDTO';
 import { prisma } from '../prisma/client';
 import { UserModel } from '../models/UserModels';
+import { AppError } from '../errors/AppError';
 
 export class UserRepository {
   async createUser(user: UserDTO): Promise<UserModel> {
@@ -13,7 +14,7 @@ export class UserRepository {
       });
 
       if (userAlreadyExists) {
-        throw new Error('User with the same email or document already exists.');
+        throw new AppError('User already exists.');
       }
 
       const createUser = await prisma.user.create({
