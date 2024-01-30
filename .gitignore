@@ -3,4 +3,3 @@ volumes
 prisma
 .env
 *.sql
-docker-compose

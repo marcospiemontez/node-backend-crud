@@ -1,7 +1,9 @@
 import { createConnection, Connection } from 'mysql2/promise';
 import { DBConfiguration } from './DbConfiguration';
 import { promises as fsPromises } from 'fs';
+import dotenv from 'dotenv';
 
+dotenv.config();
 export class MySqlConfiguration implements DBConfiguration {
   private connectionPromise: Promise<Connection> | undefined;
 
@@ -18,13 +20,14 @@ export class MySqlConfiguration implements DBConfiguration {
   }
 
   async createConnection(): Promise<Connection> {
+    const port = process.env.SERVER_PORT as string;
     if (!this.connectionPromise) {
       this.connectionPromise = createConnection({
-        host: 'localhost',
-        port: 3306,
-        user: 'node_user',
-        password: 'node_pass',
-        database: 'node',
+        host: process.env.SERVER_HOST,
+        port: Number(port),
+        user: process.env.MYSQL_USER,
+        password: process.env.MYSQL_PASSWORD,
+        database: process.env.MYSQL_DATABASE,
       });
     }
     return this.connectionPromise;

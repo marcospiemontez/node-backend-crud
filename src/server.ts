@@ -3,9 +3,10 @@ import loggerMiddleware from './infra/middleware/logger.middleware';
 import express from 'express';
 import { routes } from './routes';
 import { MySqlConfiguration } from "./infra/database/MySqlConfiguration";
+import dotenv from 'dotenv';
 
+dotenv.config();
 const app = express();
-const PORT = 3000;
 
 const dbConfig = new MySqlConfiguration();
 dbConfig.createConnection();
@@ -14,6 +15,6 @@ app.use(express.json());
 app.use(routes);
 app.use(loggerMiddleware);
 
-const port: number = 3000;
+const port = process.env.SERVER_PORT as String;
 
-app.listen(port, () => console.log(`Server is running in port ${port}`));
+app.listen(Number(port), () => console.log(`Server is running in port ${Number(port)}`));
