@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
-import { UserService } from '../services/UserService';
+import { CreateUserDTO } from '../dtos/CreateUserDTO';
+import { UserService } from '../domains/user/services/UserService';
 
 export class UserController {
   private userService: UserService;
@@ -8,17 +9,10 @@ export class UserController {
     this.userService = userService;
   }
 
-  async handle(req: Request, res: Response) {
-    const { name, email, password, document } = req.body;
+  createUser(req: Request, res: Response): void {
+    const createUserDTO: CreateUserDTO = req.body;
+    const newUser = this.userService.createUser(createUserDTO);
 
-    const user = {
-      name,
-      email,
-      password,
-      document,
-    }
-
-    const result = await this.userService.createUser(user);
-    return res.status(201).json(result);
+    res.json(newUser);
   }
 }
